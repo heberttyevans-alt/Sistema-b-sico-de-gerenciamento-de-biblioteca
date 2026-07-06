@@ -1,17 +1,20 @@
+# importa a bilioteca que permite o python se comunicar com o sistema operacional
 import os
+# importa a biblioteca que permite o python se comunicar com o banco de dados MySQL
 import mysql.connector
+# importa a biblioteca que permite o python ler variáveis de ambiente de um arquivo .env
 from dotenv import load_dotenv
-
+# carrega as variáveis de ambiente do arquivo .env
 load_dotenv()
-
+# lê as variáveis de ambiente do arquivo .env
 host_banco = os.getenv("DB_HOST")
 usuario_banco = os.getenv("DB_USER")
 senha_banco = os.getenv("DB_PASSWORD")
 nome_banco = os.getenv("DB_NAME")
-
+# verifica se todas as variáveis de ambiente foram carregadas corretamente
 if not all([host_banco, usuario_banco, senha_banco, nome_banco]):
     raise ValueError("Variaveis ausentes no arquivo .env. Por favor, verifique se todas as variaveis de ambiente estão definidas corretamente.")
-
+# define a classe Livro com os atributos id, titulo, autor, ano_publicacao e categoria
 class Livro:
     def __init__(self, id, titulo, autor, ano_publicacao, categoria):
         self.id = id
