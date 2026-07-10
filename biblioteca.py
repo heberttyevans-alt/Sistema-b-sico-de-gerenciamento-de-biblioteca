@@ -1,3 +1,4 @@
+
 # importa a bilioteca que permite o python se comunicar com o sistema operacional
 import os
 # importa a biblioteca que permite o python se comunicar com o banco de dados MySQL
@@ -25,6 +26,15 @@ class Livro:
 
     def __str__(self):
         return f'[{self.id}] {self.titulo} - {self.autor} | Ano: {self.ano_publicacao} | Categoria: {self.categoria}'
+
+# Garante que a tabela livros tenha a coluna categoria antes de inserir
+def garantir_coluna_categoria(conexao, cursor):
+    cursor.execute('SHOW COLUMNS FROM livros')
+    colunas = {coluna[0] for coluna in cursor.fetchall()}
+    if 'categoria' not in colunas:
+        cursor.execute("ALTER TABLE livros ADD COLUMN categoria VARCHAR(50)")
+        conexao.commit()
+        print("Coluna 'categoria' adicionada à tabela 'livros'.")
 
 # Insere um novo livro no banco de dados
 def cadastrar(conexao, cursor):
@@ -131,6 +141,7 @@ def menu():
             database=nome_banco
         )
         cursor = conexao.cursor()
+        garantir_coluna_categoria(conexao, cursor)
 
         while True:
             print('\n=== Sistema de Gerenciamento de Biblioteca ===')
